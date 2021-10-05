@@ -7,7 +7,6 @@ import java.util.List;
 
 //import domain.Booking;
 import domain.Question;
-import domain.Account;
 import domain.Event;
 import domain.Forecast;
 import exceptions.EventFinished;

@@ -40,15 +40,13 @@ class CreateQuestionDATest {
 			Float betMinimum = 2f;
 			int questiontype = 1;
 			String pmultiply = "2";
-
+			
 			testDA.open();
 			ev = testDA.addEventWithQuestion(eventText, oneDate, queryText, betMinimum,questiontype,pmultiply);
 			testDA.close();
-			
-			testDA.
 
 			// invoke System Under Test (sut) and Assert
-			assertThrows(QuestionAlreadyExist.class, () -> sut.createQuestion(ev, queryText, betMinimum, questiontype, pmultiply));
+			assertThrows(QuestionAlreadyExist.class, () -> sut.createQuestion(ev, queryText, betMinimum,questiontype,pmultiply));
 
 		} catch (ParseException e) {
 			fail("It should be correct: check the date format");
@@ -59,7 +57,6 @@ class CreateQuestionDATest {
 		boolean b = testDA.removeEvent(ev);
 		System.out.println("Removed event " + b);
 		testDA.close();
-
 	}
 
 	@Test
@@ -124,17 +121,8 @@ class CreateQuestionDATest {
 			int questiontype = 1;
 			String pmultiply = "2";
 			
-			try {
-				// invoke System Under Test (sut)
-				Question q= sut.createQuestion(null, queryText, betMinimum, questiontype, pmultiply);
-
-				// verify the results returned
-				assertNull(q);
-
-			} catch (QuestionAlreadyExist e) {
-				// if the program goes to this point fail
-				fail("The event is null. Impossible to search for a question in it");
-			} 
+			// invoke System Under Test (sut)
+			assertThrows(NullPointerException.class, ()-> sut.createQuestion(null, queryText, betMinimum, questiontype, pmultiply)); 
 	}
 	
 	@Test

@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlIDREF;
-
 import org.junit.jupiter.api.Test;
 
 import configuration.ConfigXML;
