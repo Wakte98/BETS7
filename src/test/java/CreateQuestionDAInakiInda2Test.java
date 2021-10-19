@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
+import javax.jdo.Transaction;
+
 import org.junit.jupiter.api.Test;
 
 import configuration.ConfigXML;
@@ -20,9 +22,9 @@ import domain.Question;
 import exceptions.QuestionAlreadyExist;
 import utility.TestUtilityDataAccess;
 
-class CreateQuestionDATest {
+class CreateQuestionDAInakiInda2Test {
 
-	static DataAccess sut = new DataAccess(ConfigXML.getInstance().getDataBaseOpenMode().equals("initialize"));;
+	static DataAccess sut = new DataAccess(ConfigXML.getInstance().getDataBaseOpenMode().equals("open"));;
 	static TestUtilityDataAccess testDA = new TestUtilityDataAccess();
 
 	private Event ev;
@@ -54,10 +56,13 @@ class CreateQuestionDATest {
 		}
 
 		// Remove the created objects in the database (cascade removing)
-		testDA.open();
-		boolean b = testDA.removeEvent(ev);
-		System.out.println("Removed event " + b);
-		testDA.close();
+		finally {
+			// Remove the created objects in the database (cascade removing)
+			testDA.open();
+			boolean b = testDA.removeEvent(ev);
+			testDA.close();
+			System.out.println("Finally " + b);
+		}
 	}
 
 	@Test
@@ -225,5 +230,34 @@ class CreateQuestionDATest {
 		}
 
 	}
+	@Test
+	void testGetForecastsOfQuestion() {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Date oneDate = sdf.parse("05/10/2022");
+			String eventText = "Event Text";
+			String queryText = "Query Text";
+			Float betMinimum = 2f;
+			int questiontype = 1;
+			String pmultiply = "2";
 
+			testDA.open();
+			ev = testDA.addEventWithQuestion(eventText, oneDate, queryText, betMinimum,questiontype,pmultiply);
+			testDA.close();
+
+
+			// invoke System Under Test (sut) and Assert
+			assertThrows(QuestionAlreadyExist.class, () -> sut.getForecastsOfQuestion(ev.getQuestions().firstElement()));
+
+		} catch (ParseException e) {
+			fail("It should be correct: check the date format");
+		}
+
+		// Remove the created objects in the database (cascade removing)
+		testDA.open();
+		boolean b = testDA.removeEvent(ev);
+		System.out.println("Removed event " + b);
+		testDA.close();
+
+	}
 }
