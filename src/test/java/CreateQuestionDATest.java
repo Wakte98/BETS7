@@ -37,7 +37,7 @@ class CreateQuestionDATest {
 			Date oneDate = sdf.parse("05/10/2022");
 			String eventText = "Event Text";
 			String queryText = "Query Text";
-			Float betMinimum = 2f;
+			float betMinimum = 2f;
 			int questiontype = 1;
 			String pmultiply = "2";
 			
@@ -46,7 +46,8 @@ class CreateQuestionDATest {
 			testDA.close();
 
 			// invoke System Under Test (sut) and Assert
-			assertThrows(QuestionAlreadyExist.class, () -> sut.createQuestion(ev, queryText, betMinimum,questiontype,pmultiply));
+			assertThrows(QuestionAlreadyExist.class, 
+					() -> sut.createQuestion(ev, queryText, betMinimum,questiontype,pmultiply));
 
 		} catch (ParseException e) {
 			fail("It should be correct: check the date format");
